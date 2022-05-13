@@ -1,6 +1,7 @@
 package src.domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class User {
     private String username;
@@ -12,6 +13,8 @@ public class User {
     private boolean premium;
     private String profilePicture;
     private ArrayList<String> hobbies;
+    private HashMap<String, User> followers = new HashMap<String, User>();
+    private HashMap<String, User> followed = new HashMap<String, User>();
 
     public User(String username, String password, String email, String firstName, String lastName, int age, boolean premium) {
         this.username = username;
@@ -93,5 +96,43 @@ public class User {
 
     public void setPremium(boolean premium) {
         this.premium = premium;
+    }
+
+    public HashMap<String, User> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(HashMap<String, User> followers) {
+        this.followers = followers;
+    }
+
+    public HashMap<String, User> getFollowed() {
+        return followed;
+    }
+
+    public void setFollowed(HashMap<String, User> followed) {
+        this.followed = followed;
+    }
+
+    public boolean isFollowing(User user) {
+        return followed.containsKey(user.getUsername());
+    }
+
+    public void follow(User user) {
+        followed.put(user.getUsername(), user);
+        user.addFollower(this);
+    }
+
+    public void unfollow(User user) {
+        followed.remove(user.getUsername());
+        user.removeFollower(this);
+    }
+
+    public void addFollower(User user) {
+        followers.put(user.getUsername(), user);
+    }
+
+    public void removeFollower(User user) {
+        followers.remove(user.getUsername());
     }
 }

@@ -72,14 +72,14 @@ public class LoginPanel extends JPanel {
                     return;
                 }
                 screen.setMe(user);
-                screen.switchPanel("profile");
+                screen.switchPanel("homepage", null);
             }
         });
 
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                screen.switchPanel("register");
+                screen.switchPanel("register", null);
             }
         });
     }

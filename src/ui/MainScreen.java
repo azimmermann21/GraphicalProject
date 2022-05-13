@@ -1,14 +1,12 @@
 package src.ui;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.swing.*;
 
 import src.domain.User;
 
 public class MainScreen extends JFrame {
-    private HashMap <String, JPanel> panels = new HashMap<String, JPanel>();
     private ArrayList<User> users;
     private User me;
 
@@ -23,17 +21,19 @@ public class MainScreen extends JFrame {
         setResizable(false);
         setVisible(true);
 
-        panels.put("login", new LoginPanel(this));
-        panels.put("profile", new HomePanel(this));
-        panels.put("register", new RegisterPanel(this));
-        setContentPane(panels.get("login"));
+        setContentPane(new LoginPanel(this));
         createDummyUsers();
     }
 
-    public void switchPanel(String panelName) {
-        System.out.println(me);
-        setContentPane(panels.get(panelName));
-        revalidate();
+    public void switchPanel(String panelName, String arg) {
+        if (panelName == "login")
+            setContentPane(new LoginPanel(this));
+        else if (panelName == "register")
+            setContentPane(new RegisterPanel(this));
+        else if (panelName == "homepage")
+            setContentPane(new HomePanel(this));
+        else if (panelName == "profile")
+            setContentPane(new ProfilePanel(this, arg));
         repaint();
     }
 

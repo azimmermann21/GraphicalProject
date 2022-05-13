@@ -104,14 +104,14 @@ public class RegisterPanel extends JPanel {
                 users.add(user);
                 screen.setUsers(users);
                 screen.setMe(user);
-                screen.switchPanel("profile");
+                screen.switchPanel("homepage", null);
             }
         });
 
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                screen.switchPanel("login");
+                screen.switchPanel("login", null);
             }
         });
     }
