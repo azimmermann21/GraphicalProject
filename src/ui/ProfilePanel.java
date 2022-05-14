@@ -1,25 +1,50 @@
 package src.ui;
 
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import src.domain.User;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import java.io.File;
 
 public class ProfilePanel extends JPanel {
     MainScreen screen;
     User user;
     JButton homeButton = new JButton("Home");
-    JLabel usernameLabel = new JLabel();
+    JButton logoutButton = new JButton("Logout");
+    JButton deleteButton = new JButton("Delete account");
     JButton followButton = new JButton("Follow");
-    JLabel followersLabel = new JLabel();
+    JButton editButton = new JButton("Save changes");
+    JButton pictureButton = new JButton("Change profile pic");
     JLabel followedLabel = new JLabel();
-    JLabel followerLabel = new JLabel();
+    JLabel profilePicture = new JLabel();
+    JLabel usernameLabel = new JLabel();
+    JLabel firstNameLabel = new JLabel();
+    JLabel lastNameLabel = new JLabel();
+    JLabel accountTypeLabel = new JLabel();
+    JLabel emailLabel = new JLabel();
+    JLabel ageLabel = new JLabel();
+    JLabel hobbiesLabel = new JLabel();
+    JLabel hobbiesList = new JLabel();
+    JTextField firstNameText = new JTextField();
+    JTextField lastNameText = new JTextField();
+    JTextField emailText = new JTextField();
+    JTextField ageText = new JTextField();
+    JTextField hobbiesText = new JTextField();
 
     public ProfilePanel(MainScreen screen, String username) {
         this.screen = screen;
@@ -28,6 +53,8 @@ public class ProfilePanel extends JPanel {
         setLayout(null);
 
         setUser(username);
+
+        followList();
 
         setAllComponents();
 
@@ -39,22 +66,71 @@ public class ProfilePanel extends JPanel {
     private void setAllComponents() {
         if (screen.getMe().isFollowing(user))
             followButton.setText("Unfollow");
-        homeButton.setBounds(3, 3,100,25);
-        usernameLabel.setBounds(300, 300, 400, 25);
-        followButton.setBounds(300, 350, 100, 25);
-        followersLabel.setText("Followers: (" + user.getFollowers().size() + ")");
-        followersLabel.setBounds(300, 400, 400, 25);
-        followedLabel.setText("Followed: (" + user.getFollowed().size() + ")");
-        followedLabel.setBounds(300, 450, 400, 25);
+        homeButton.setBounds(681, 3,100,25);
+        logoutButton.setBounds(3, 3,100,25);
+        followButton.setBounds(3, 125, 100, 25);
+        editButton.setBounds(3, 330, 150, 25);
+        deleteButton.setBounds(3, 360,150,25);
+        pictureButton.setBounds(3, 390, 150, 25);
+        followedLabel.setText(user.getFollowed().size() + " Follow :");
+        followedLabel.setBounds(12, 420, 100, 25);
+        accountTypeLabel.setText(user.getPremium() ? "Premium" : "Standard");
+        accountTypeLabel.setBounds(20, 30, 100, 25);
+        profilePicture.setIcon(getProfilePicture());
+        profilePicture.setBounds(16, 55, 64, 64);
+        usernameLabel.setBounds(12, 150, 100, 25);
+        firstNameLabel.setText(user.getFirstName());
+        firstNameLabel.setBounds(12, 170, 100, 25);
+        lastNameLabel.setText(user.getLastName());
+        lastNameLabel.setBounds(12, 190, 100, 25);
+        emailLabel.setText(user.getEmail());
+        emailLabel.setBounds(12, 210, 150, 25);
+        ageLabel.setText(user.getAge() + "");
+        ageLabel.setBounds(12, 230, 100, 25);
+        hobbiesLabel.setText("Hobbies :");
+        hobbiesLabel.setBounds(110, 3, 70, 25);
+        hobbiesList.setText(getHobbies());
+        hobbiesList.setBounds(170, 3, 200, 25);
+        firstNameText.setText(user.getFirstName());
+        firstNameText.setBounds(12, 175, 100, 25);
+        lastNameText.setText(user.getLastName());
+        lastNameText.setBounds(12, 205, 100, 25);
+        emailText.setText(user.getEmail());
+        emailText.setBounds(12, 235, 150, 25);
+        ageText.setText(user.getAge() + "");
+        ageText.setBounds(12, 265, 100, 25);
+        hobbiesText.setText(getHobbies());
+        hobbiesText.setBounds(12, 295, 200, 25);
     }
 
     private void addAllComponents() {
-        if (user.getUsername() !=  screen.getMe().getUsername())
-            add(followButton);
         add(homeButton);
-        add(usernameLabel);
-        add(followersLabel);
+        add(logoutButton);
         add(followedLabel);
+        add(profilePicture);
+        add(usernameLabel);
+
+        if (user.getUsername() !=  screen.getMe().getUsername()) {
+            add(followButton);
+            add(firstNameLabel);
+            add(lastNameLabel);
+            add(accountTypeLabel);
+            if (screen.getMe().isFollowing(user)) {
+                add(emailLabel);
+                add(ageLabel);
+                add(hobbiesLabel);
+                add(hobbiesList);
+            }
+        } else {
+            add(firstNameText);
+            add(lastNameText);
+            add(emailText);
+            add(ageText);
+            add(hobbiesText);
+            add(editButton);
+            add(deleteButton);
+            add(pictureButton);
+        }
     }
 
     private void listenButtons() {
@@ -62,6 +138,14 @@ public class ProfilePanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 screen.switchPanel("homepage", null);
+            }
+        });
+
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                screen.setMe(null);
+                screen.switchPanel("login", null);
             }
         });
 
@@ -75,7 +159,41 @@ public class ProfilePanel extends JPanel {
                     screen.getMe().unfollow(user);
                     followButton.setText("Follow");
                 }
-                updateFollowers();
+                updatePage();
+            }
+        });
+
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteAccount();
+            }
+        });
+
+        editButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    editUser();
+                } catch (Exception error) {
+                    System.out.println(error.getMessage());
+                    return;
+                }
+                updatePage();
+            }
+        });
+
+        pictureButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser chooser = new JFileChooser();
+                int result = chooser.showSaveDialog(null);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = chooser.getSelectedFile();
+                    String path = selectedFile.getAbsolutePath();
+                    user.setProfilePicture(path);
+                    updatePage();
+                }
             }
         });
     }
@@ -96,9 +214,93 @@ public class ProfilePanel extends JPanel {
         usernameLabel.setText(user.getUsername());
     }
 
-    public void updateFollowers() {
-        followersLabel.setText("Followers: (" + user.getFollowers().size() + ")");
+    public void updatePage() {
+        screen.switchPanel("profile", user.getUsername());
     }
 
-    // Display the followers and followed of the user
+    private void followList() {
+        HashMap<String, User> followed = user.getFollowed();
+        int xGap = 0;
+
+        for (User follow : followed.values()) {
+            JLabel followedListLabel = new JLabel();
+            followedListLabel.setText(follow.getUsername());
+            followedListLabel.setBounds(15, 445 + xGap, 400, 20);
+            xGap += 20;
+            add(followedListLabel);
+        }
+    }
+
+    private void editUser() throws Exception {
+
+        Pattern pattern = Pattern.compile("^[A-Za-z0-9+_.-]+@.+\\..+$");
+        Matcher matcher = pattern.matcher(emailText.getText());
+        ArrayList<String> hobbies = new ArrayList<>();
+
+        if (ageText.getText().isEmpty())
+            throw new Exception("Age is empty");
+        int age = Integer.parseInt(ageText.getText());
+
+        if (!matcher.matches())
+            throw new Exception("Email is not valid");
+        if (emailText.getText().length() > 40)
+            throw new Exception("Email must be less than 40 characters");
+        if (firstNameText.getText().length() < 1 || firstNameText.getText().length() > 22)
+            throw new Exception("First Name must be between 1 and 22 characters");
+        if (lastNameText.getText().length() < 1 || lastNameText.getText().length() > 22)
+            throw new Exception("Last Name must be between 1 and 22 characters");
+        if (age < 15 || age > 100)
+            throw new Exception("Age must be between 15 and 100");
+        if (hobbiesText.getText().length() > 0) {
+            String[] hobbiesArray = hobbiesText.getText().split(" ");
+            for (String hobby : hobbiesArray)
+                hobbies.add(hobby);
+        }
+
+        user.setFirstName(firstNameText.getText());
+        user.setLastName(lastNameText.getText());
+        user.setEmail(emailText.getText());
+        user.setAge(Integer.parseInt(ageText.getText()));
+        user.setHobbies(hobbies);
+    }
+
+    private void deleteAccount() {
+        ArrayList<User> users = screen.getUsers();
+
+        screen.setMe(null);
+        users.remove(user);
+
+        for (User u : users) {
+            HashMap<String, User> followed = u.getFollowed();
+            followed.remove(user.getUsername());
+        }
+        //TODO remove from groups
+        //TODO remove posts
+        screen.switchPanel("login", null);
+    }
+
+    private String getHobbies() {
+        String hobbies = "";
+        for (String s : user.getHobbies()) {
+            hobbies += s + " ";
+        }
+        return hobbies;
+    }
+    
+    private ImageIcon getProfilePicture() {
+        Matcher matcherpng;
+        Matcher matcherjpg;
+        Matcher matcherjpeg;
+        ImageIcon defaultPicture = new ImageIcon("assets/user.png");
+        String picture = user.getProfilePicture();
+
+        if (picture != null) {
+            matcherpng = Pattern.compile(".png").matcher(picture);
+            matcherjpg = Pattern.compile(".jpg").matcher(picture);
+            matcherjpeg = Pattern.compile(".jpeg").matcher(picture);
+            if (matcherpng.find() || matcherjpg.find() || matcherjpeg.find())
+                return new ImageIcon(user.getProfilePicture());
+        }
+        return defaultPicture;
+    }
 }

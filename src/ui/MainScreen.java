@@ -7,7 +7,7 @@ import javax.swing.*;
 import src.domain.User;
 
 public class MainScreen extends JFrame {
-    private ArrayList<User> users;
+    private ArrayList<User> users = new ArrayList<User>();
     private User me;
 
     public static void main(String[] args) {
@@ -38,11 +38,27 @@ public class MainScreen extends JFrame {
     }
 
     public void createDummyUsers() {
-        users = new ArrayList<User>();
-        users.add(new User("johndoe", "John123", "john@doe.com", "John", "Doe", 21, false));
-        users.add(new User("billylesinge", "Louis123", "billy@lesinge.com", "Billy", "Lesinge", 8, false));
-        users.add(new User("louisleboss", "Louis123", "louis@leboss.com", "Louis", "Christner", 21, true));
-        users.add(new User("hgvleboss", "Louis123", "hgv@leboss.com", "Hoang-Giang", "Vo", 21, true));
+        User johndoe = new User("johndoe", "John123", "john@doe.com", "John", "Doe", 21, false);
+        User janedoe = new User("janedoe", "Jane123", "jane@doe.com", "Jane", "Doe", 21, false);
+        User billylesinge = new User("billylesinge", "Louis123", "billy@lesinge.com", "Billy", "Lesinge", 15, false);
+        User louisleboss = new User("louisleboss", "Louis123", "louis@leboss.com", "Louis", "Christner", 21, true);
+        User hgvleboss = new User("hgvleboss", "Louis123", "hgv@leboss.com", "Hoang-Giang", "Vo", 21, true);
+        User iboleboss = new User("iboleboss", "Louis123", "ibo@leboss.com", "Ibrahim", "Akgul", 21, true);
+        User matleboss = new User("matleboss", "Louis123", "mat@leboss.com", "Matthieu", "Houlle", 21, true);
+        
+        ArrayList<String> hobbies = new ArrayList<String>();
+        hobbies.add("Football");
+        hobbies.add("Coding");
+        hobbies.add("Reading");
+        louisleboss.setHobbies(hobbies);
+
+        users.add(johndoe);
+        users.add(janedoe);
+        users.add(billylesinge);
+        users.add(louisleboss);
+        users.add(hgvleboss);
+        users.add(iboleboss);
+        users.add(matleboss);
     }
 
     public ArrayList<User> getUsers() {

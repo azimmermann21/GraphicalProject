@@ -3,6 +3,7 @@ package src.ui;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import src.domain.User;
@@ -18,7 +19,7 @@ public class LoginPanel extends JPanel {
     JLabel usernameLabel = new JLabel();
     JTextField usernameText = new JTextField("billylesinge");
     JLabel passwordLabel = new JLabel();
-    JTextField passwordText = new JTextField("Louis123");
+    JPasswordField passwordText = new JPasswordField("Louis123");
     JButton loginButton = new JButton("Login");
     JButton registerButton = new JButton("Register yourself !");
 
