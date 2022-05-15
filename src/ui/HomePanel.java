@@ -1,14 +1,17 @@
 package src.ui;
 
+import src.domain.User;
+import src.domain.Group;
+import src.domain.Searchable;
+
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
-import src.domain.User;
-
+import javax.swing.text.AbstractDocument.Content;
 import javax.swing.JButton;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.util.ArrayList;
 
 public class HomePanel extends JPanel {
@@ -64,15 +67,21 @@ public class HomePanel extends JPanel {
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                User user;
+                Searchable result;   
 
                 try {
-                    user = searchUser();
-                    if (user != null) {
+                    result = search();
+                    //TODO: make search() search for content 
+
+                    if (result instanceof User) {
+                        User user = (User) result;
                         screen.switchPanel("profile", user.getUsername());
-                        return;
+                    } else if (result instanceof Group) {
+                        Group group = (Group) result;
+                        screen.switchPanel("group", group.getName());
+                    } else if (result instanceof Content) {
+                        //TODO: Display content in a modal window 
                     }
-                    //Group search
                 } catch (Exception error) {
                     System.out.println(error.getMessage());
                 }
@@ -80,14 +89,21 @@ public class HomePanel extends JPanel {
         });
     }
 
-    private User searchUser() {
+    private Searchable search() {
         ArrayList<User> users = screen.getUsers();
+        ArrayList<Group> groups = screen.getGroups();
 
         for (User user : users) {
             if (user.getUsername().equals(searchBar.getText())) {
                 return user;
             }
         }
-        throw new IllegalArgumentException("User " + searchBar.getText() + " not found");
+
+        for (Group group : groups) {
+            if (group.getName().equals(searchBar.getText())) {
+                return group;
+            }
+        }
+        throw new IllegalArgumentException("No User, Group or Content named " + searchBar.getText() + " has been found");
     }
 }

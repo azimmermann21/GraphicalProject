@@ -3,7 +3,7 @@ package src.domain;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class User {
+public class User implements Searchable {
     private String username;
     private String password;
     private String email;
@@ -14,6 +14,7 @@ public class User {
     private String profilePicture;
     private ArrayList<String> hobbies = new ArrayList<String>();
     private HashMap<String, User> followed = new HashMap<String, User>();
+    private HashMap<String, Content> contents = new HashMap<String, Content>();
 
     public User(String username, String password, String email, String firstName, String lastName, int age, boolean premium) {
         this.username = username;
@@ -173,6 +174,22 @@ public class User {
      */
     public void setFollowed(HashMap<String, User> followed) {
         this.followed = followed;
+    }
+
+    /**
+     * @return the contents of the user
+     * Get the contents the user created
+     */
+    public HashMap<String, Content> getContents() {
+        return contents;
+    }
+
+    /**
+     * @param contents the contents to set
+     * Set the contents of the user
+     */
+    public void setContents(HashMap<String, Content> contents) {
+        this.contents = contents;
     }
 
     /**

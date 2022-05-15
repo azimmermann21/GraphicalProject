@@ -1,11 +1,10 @@
 package src.ui;
 
+import src.domain.User;
+import src.domain.Group;
+
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
-import src.domain.User;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -30,7 +29,12 @@ public class ProfilePanel extends JPanel {
     JButton followButton = new JButton("Follow");
     JButton editButton = new JButton("Save changes");
     JButton pictureButton = new JButton("Change profile pic");
+    JButton userSuggestionButton = new JButton("Suggest users");
+    JButton groupSuggestionButton = new JButton("Suggest groups");
+    JButton createPostButton = new JButton("Create post");
+    JButton createGroupButton = new JButton("Create group");
     JLabel followedLabel = new JLabel();
+    JLabel groupsLabel = new JLabel();
     JLabel profilePicture = new JLabel();
     JLabel usernameLabel = new JLabel();
     JLabel firstNameLabel = new JLabel();
@@ -56,6 +60,8 @@ public class ProfilePanel extends JPanel {
 
         followList();
 
+        groupList();
+
         setAllComponents();
 
         addAllComponents();
@@ -72,8 +78,14 @@ public class ProfilePanel extends JPanel {
         editButton.setBounds(3, 330, 150, 25);
         deleteButton.setBounds(3, 360,150,25);
         pictureButton.setBounds(3, 390, 150, 25);
+        userSuggestionButton.setBounds(655, 501, 125, 25);
+        groupSuggestionButton.setBounds(655, 531, 125, 25);
+        createGroupButton.setBounds(3, 501, 150, 25);
+        createPostButton.setBounds(3, 531, 150, 25);
         followedLabel.setText(user.getFollowed().size() + " Follow :");
-        followedLabel.setBounds(12, 420, 100, 25);
+        followedLabel.setBounds(681, 30, 100, 25);
+        groupsLabel.setText(getGroupNumber() + " Groups :");
+        groupsLabel.setBounds(681, 200, 100, 25);
         accountTypeLabel.setText(user.getPremium() ? "Premium" : "Standard");
         accountTypeLabel.setBounds(20, 30, 100, 25);
         profilePicture.setIcon(getProfilePicture());
@@ -107,14 +119,15 @@ public class ProfilePanel extends JPanel {
         add(homeButton);
         add(logoutButton);
         add(followedLabel);
+        add(groupsLabel);
         add(profilePicture);
         add(usernameLabel);
+        add(accountTypeLabel);
 
         if (user.getUsername() !=  screen.getMe().getUsername()) {
             add(followButton);
             add(firstNameLabel);
             add(lastNameLabel);
-            add(accountTypeLabel);
             if (screen.getMe().isFollowing(user)) {
                 add(emailLabel);
                 add(ageLabel);
@@ -130,6 +143,11 @@ public class ProfilePanel extends JPanel {
             add(editButton);
             add(deleteButton);
             add(pictureButton);
+            add(userSuggestionButton);
+            add(groupSuggestionButton);
+            add(createPostButton);
+            if (user.getPremium())
+                add(createGroupButton);
         }
     }
 
@@ -196,6 +214,38 @@ public class ProfilePanel extends JPanel {
                 }
             }
         });
+
+        userSuggestionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO:
+                System.out.println("Suggestion user");
+            }
+        });
+
+        groupSuggestionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO:
+                System.out.println("Suggestion group");
+            }
+        });
+
+        createPostButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO:
+                System.out.println("create post");
+            }
+        });
+
+        createGroupButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO:
+                System.out.println("create group");
+            }
+        });
     }
 
     public void setUser(String username) {
@@ -225,9 +275,33 @@ public class ProfilePanel extends JPanel {
         for (User follow : followed.values()) {
             JLabel followedListLabel = new JLabel();
             followedListLabel.setText(follow.getUsername());
-            followedListLabel.setBounds(15, 445 + xGap, 400, 20);
+            followedListLabel.setBounds(681, 55 + xGap, 400, 20);
             xGap += 20;
             add(followedListLabel);
+        }
+    }
+
+    private int getGroupNumber() {
+        int groupNumber = 0;
+
+        for (Group group : screen.getGroups()) {
+            if (group.getMembers().get(user.getUsername()) != null)
+                groupNumber++;
+        }
+        return groupNumber;
+    }
+
+    private void groupList() {
+        int xGap = 0;
+
+        for (Group group : screen.getGroups()) {
+            if (group.getMembers().get(user.getUsername()) != null) {
+                JLabel groupListLabel = new JLabel();
+                groupListLabel.setText(group.getName());
+                groupListLabel.setBounds(681, 220 + xGap, 400, 20);
+                xGap += 20;
+                add(groupListLabel);
+            }
         }
     }
 
@@ -264,18 +338,36 @@ public class ProfilePanel extends JPanel {
         user.setHobbies(hobbies);
     }
 
+    /**
+     * Deletes the account of the user from the application, and all of the data associated with it
+     */
     private void deleteAccount() {
         ArrayList<User> users = screen.getUsers();
+        ArrayList<Group> groups = screen.getGroups();
+        ArrayList<Group> groupsToDelete = new ArrayList<>();
 
         screen.setMe(null);
         users.remove(user);
 
+        // Search for groups that have the user as creator
+        for (Group g : groups)
+            if (g.getCreator().getUsername().equals(user.getUsername()))
+                groupsToDelete.add(g);
+        // Delete groups that have the user as creator
+        for (Group g : groupsToDelete)
+            groups.remove(g);
+        // Delete user from groups
+        for (Group g : groups) {
+            HashMap<String, User> members = g.getMembers();
+            members.remove(user.getUsername());
+        }
+        // Delete user from all users' followed list
         for (User u : users) {
             HashMap<String, User> followed = u.getFollowed();
             followed.remove(user.getUsername());
         }
-        //TODO remove from groups
-        //TODO remove posts
+
+        //TODO: remove posts
         screen.switchPanel("login", null);
     }
 

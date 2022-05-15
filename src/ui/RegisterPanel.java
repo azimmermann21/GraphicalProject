@@ -6,11 +6,14 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import src.domain.Group;
 import src.domain.User;
+import src.domain.Content;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.awt.Font;
@@ -33,6 +36,9 @@ public class RegisterPanel extends JPanel {
     JButton registerButton = new JButton("Register");
     JButton loginButton = new JButton("Already have an account ? Login");
 
+    /**
+     * Create the panel
+     */
     public RegisterPanel(MainScreen screen) {
         this.screen = screen;
         setSize(800, 600);
@@ -46,6 +52,9 @@ public class RegisterPanel extends JPanel {
         listenButtons();
     }
 
+    /**
+     * Set all the components properties and their bounds
+     */
     private void setAllComponents() {
         registerLabel.setText("Register");
         registerLabel.setBounds(340,20,160,40);
@@ -72,6 +81,9 @@ public class RegisterPanel extends JPanel {
         loginButton.setBounds(275,480,250,40);
     }
     
+    /**
+     * Adds all components to the panel
+     */
     private void addAllComponents() {
         add(registerLabel);
         add(usernameLabel);
@@ -90,6 +102,9 @@ public class RegisterPanel extends JPanel {
         add(loginButton);
     }
 
+    /**
+     * Listen for button presses and do the appropriate action.
+     */
     private void listenButtons() {
         registerButton.addActionListener(new ActionListener() {
             @Override
@@ -117,8 +132,12 @@ public class RegisterPanel extends JPanel {
         });
     }
 
+    /**
+     * Register a new user
+     * @return the new user
+     * @throws Exception if one of the fields is empty or not valid
+     */
     private User register() throws Exception {
-        
         Pattern pattern = Pattern.compile("^[A-Za-z0-9+_.-]+@.+\\..+$");
         Matcher matcher = pattern.matcher(emailText.getText());
 
@@ -146,14 +165,27 @@ public class RegisterPanel extends JPanel {
         return new User(usernameText.getText(), passwordText.getText(), emailText.getText(), firstNameText.getText(), lastNameText.getText(), age, false);
     }
 
+    /**
+     * Checks if the username is already taken
+     * @param username the username to check
+     * @return true if the username is not taken, false otherwise
+     */
     private boolean checkUsername(String username) {
         ArrayList<User> users = screen.getUsers();
+        ArrayList<Group> groups = screen.getGroups();
+        HashMap<String, Content> content = screen.getAllContent();
 
-        for(User user : users) {
-            if(user.getUsername().equals(username)) {
+        //TODO: Test this
+
+        for(User user : users)
+            if(user.getUsername().equals(username))
                 return false;
-            }
-        }
+        for(Group group : groups)
+            if(group.getName().equals(username))
+                return false;
+        if (content.containsKey(username))
+            return false;
+
         return true;
     }
 }

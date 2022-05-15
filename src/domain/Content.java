@@ -1,6 +1,6 @@
 package src.domain;
 
-public class Content {
+public class Content implements Searchable {
     private String title;
     private String content;
     private String author;
