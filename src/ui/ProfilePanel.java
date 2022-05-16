@@ -234,16 +234,14 @@ public class ProfilePanel extends JPanel {
         createPostButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO:
-                System.out.println("create post");
+                screen.switchPanel("createPost", null);
             }
         });
 
         createGroupButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO:
-                System.out.println("create group");
+                screen.switchPanel("createGroup", null);
             }
         });
     }
@@ -326,7 +324,8 @@ public class ProfilePanel extends JPanel {
         if (age < 15 || age > 100)
             throw new Exception("Age must be between 15 and 100");
         if (hobbiesText.getText().length() > 0) {
-            String[] hobbiesArray = hobbiesText.getText().split(" ");
+            String hobbiesString = hobbiesText.getText().toLowerCase();
+            String[] hobbiesArray = hobbiesString.split(" ");
             for (String hobby : hobbiesArray)
                 hobbies.add(hobby);
         }

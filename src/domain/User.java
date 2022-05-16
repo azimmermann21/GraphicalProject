@@ -216,4 +216,12 @@ public class User implements Searchable {
     public boolean isFollowing(User user) {
         return followed.containsKey(user.getUsername());
     }
+
+    /**
+     * @param content the content to add
+     * Add the content to the contents of the user
+     */
+    public void addContent(Content content) {
+        contents.put(content.getTitle(), content);
+    }
 }

@@ -174,8 +174,8 @@ public class RegisterPanel extends JPanel {
         ArrayList<User> users = screen.getUsers();
         ArrayList<Group> groups = screen.getGroups();
         HashMap<String, Content> content = screen.getAllContent();
-
-        //TODO: Test this
+        
+        //TODO: Test this for content
 
         for(User user : users)
             if(user.getUsername().equals(username))

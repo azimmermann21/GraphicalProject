@@ -1,3 +1,12 @@
+/* Pledge of Honor *************************************************************************************
+I hereby certify that I have completed this programming project on my own without any help from
+anyone else. The effort in the project thus belongs completely to me. I did not search for a
+solution, or I did not consult to any program written by others or did not copy any program from
+other sources. I read and followed the guidelines provided in the project description.
+READ AND SIGN BY WRITING YOUR NAME SURNAME AND STUDENT ID
+SIGNATURE: <Antoine Zimmermann, 78291>
+************************************************************************************************************/
+
 package src.ui;
 
 import java.util.ArrayList;
@@ -45,6 +54,12 @@ public class MainScreen extends JFrame {
             setContentPane(new ProfilePanel(this, arg));
         else if (panelName == "group")
             setContentPane(new GroupPanel(this, arg));
+        else if (panelName == "createGroup")
+            setContentPane(new CreateGroupPanel(this));
+        else if (panelName == "createPost")
+            setContentPane(new CreatePostPanel(this, arg));
+        else if (panelName == "post")
+            setContentPane(new PostPanel(this, arg));
         repaint();
     }
 

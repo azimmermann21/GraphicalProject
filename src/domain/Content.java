@@ -1,15 +1,19 @@
 package src.domain;
 
+import java.util.Date;
+
 public class Content implements Searchable {
     private String title;
     private String content;
     private String author;
     private String picture;
+    private Date date;
 
     public Content(String title, String content, String author, String picture) {
         this.title = title;
         this.content = content;
         this.author = author;
+        this.date = new Date();
         if (picture != null)
             this.picture = picture;
     }
@@ -76,5 +80,21 @@ public class Content implements Searchable {
      */
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    /**
+     * @return the date of the content
+     * Get the date of the content
+     */
+    public Date getDate() {
+        return date;
+    }
+
+    /**
+     * @param date the date to set
+     * Set the date of the content
+     */
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

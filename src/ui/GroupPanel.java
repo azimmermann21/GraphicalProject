@@ -22,6 +22,7 @@ public class GroupPanel extends JPanel {
     JButton joinButton = new JButton("Join");
     JButton removeMemberButton = new JButton("Remove Member");
     JButton deleteGroupButton = new JButton("Delete Group");
+    JButton createPostButton = new JButton("Create Post");
     JLabel groupLabel = new JLabel();
     JLabel countryLabel = new JLabel("Country:");
     JLabel countryNameLabel = new JLabel();
@@ -63,6 +64,7 @@ public class GroupPanel extends JPanel {
         joinButton.setBounds(3, 33,100,25);
         removeMemberButton.setBounds(631, 533,150,25);
         deleteGroupButton.setBounds(315, 533,150,25);
+        createPostButton.setBounds(3, 515,150,25);
         groupLabel.setText(group.getName());
         groupLabel.setBounds(3,3,150,25);
         groupLabel.setFont(new Font("Serif", Font.BOLD, 20));
@@ -98,6 +100,7 @@ public class GroupPanel extends JPanel {
         if (group.getMembers().containsKey(screen.getMe().getUsername())) {
             add(membersLabel);
             add(creatorLabel);
+            add(createPostButton);
         }
     }
 
@@ -142,6 +145,13 @@ public class GroupPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 screen.getGroups().remove(group);
                 screen.switchPanel("homepage", null);
+            }
+        });
+
+        createPostButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                screen.switchPanel("createPost", group.getName());
             }
         });
     }

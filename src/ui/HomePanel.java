@@ -2,17 +2,18 @@ package src.ui;
 
 import src.domain.User;
 import src.domain.Group;
+import src.domain.Content;
 import src.domain.Searchable;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.text.AbstractDocument.Content;
 import javax.swing.JButton;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class HomePanel extends JPanel {
     MainScreen screen;
@@ -71,7 +72,6 @@ public class HomePanel extends JPanel {
 
                 try {
                     result = search();
-                    //TODO: make search() search for content 
 
                     if (result instanceof User) {
                         User user = (User) result;
@@ -80,7 +80,8 @@ public class HomePanel extends JPanel {
                         Group group = (Group) result;
                         screen.switchPanel("group", group.getName());
                     } else if (result instanceof Content) {
-                        //TODO: Display content in a modal window 
+                        Content content = (Content) result;
+                        screen.switchPanel("post", content.getTitle());
                     }
                 } catch (Exception error) {
                     System.out.println(error.getMessage());
@@ -92,6 +93,7 @@ public class HomePanel extends JPanel {
     private Searchable search() {
         ArrayList<User> users = screen.getUsers();
         ArrayList<Group> groups = screen.getGroups();
+        HashMap<String, Content> contents = screen.getAllContent();
 
         for (User user : users) {
             if (user.getUsername().equals(searchBar.getText())) {
@@ -104,6 +106,13 @@ public class HomePanel extends JPanel {
                 return group;
             }
         }
+
+        for (Content content : contents.values()) {
+            if (content.getTitle().equals(searchBar.getText())) {
+                return content;
+            }
+        }
+
         throw new IllegalArgumentException("No User, Group or Content named " + searchBar.getText() + " has been found");
     }
 }

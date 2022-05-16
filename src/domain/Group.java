@@ -130,4 +130,12 @@ public class Group implements Searchable {
     public void removeMember(User member) {
         members.remove(member.getUsername());
     }
+
+    /**
+     * @param content the content to add
+     * Add the content to the contents of the group
+     */
+    public void addContent(Content content) {
+        contents.put(content.getTitle(), content);
+    }
 }
