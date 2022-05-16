@@ -14,23 +14,26 @@ import javax.swing.JTextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class PostPanel extends JPanel {
     MainScreen screen;
     Content post;
     String picture;
+    DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, new Locale("en", "US"));
     JButton homeButton = new JButton("Home");
     JButton editPostButton = new JButton("Edit Post");
     JButton changePictureButton = new JButton("Change Picture");
+    JButton deleteButton = new JButton("Delete Post");
     JLabel postTitleLabel = new JLabel();
     JTextField postTitleText = new JTextField();
     JLabel postContentLabel = new JLabel();
     JTextField PostContentText = new JTextField();
     JLabel postPicture = new JLabel();
-
-    //TODO: add author and date
+    JLabel authorAndDateLabel = new JLabel();
 
     /**
      * Create the panel
@@ -58,17 +61,20 @@ public class PostPanel extends JPanel {
     private void setAllComponents() {
         homeButton.setBounds(681, 3,100,25);
         editPostButton.setBounds(300, 390, 200, 30);
+        changePictureButton.setBounds(300, 350, 200, 30);
+        deleteButton.setBounds(630, 531, 150, 25);
         postPicture.setBounds(570, 170, 128, 128);
         postPicture.setIcon(new ImageIcon(picture));
         postTitleText.setText(post.getTitle());
         postTitleText.setBounds(140, 200, 200, 30);
         PostContentText.setText(post.getContent());
         PostContentText.setBounds(140, 250, 400, 30);
-        changePictureButton.setBounds(300, 350, 200, 30);
         postTitleLabel.setText(post.getTitle());
         postTitleLabel.setBounds(140, 200, 100, 30);
         postContentLabel.setText(post.getContent());
         postContentLabel.setBounds(140, 250, 400, 30);
+        authorAndDateLabel.setText(post.getAuthor() + " -  " + dateFormat.format(post.getDate()));
+        authorAndDateLabel.setBounds(140, 160, 400, 30);
     }
 
     /**
@@ -77,12 +83,14 @@ public class PostPanel extends JPanel {
     private void addAllComponents() {
         add(homeButton);
         add(postPicture);
+        add(authorAndDateLabel);
 
         if (post.getAuthor().equals(screen.getMe().getUsername())) {
             add(postTitleText);
             add(PostContentText);
             add(changePictureButton);
             add(editPostButton);
+            add(deleteButton);
         } else {
             add(postTitleLabel);
             add(postContentLabel);
@@ -115,6 +123,14 @@ public class PostPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 choosePicture();
+            }
+        });
+
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deletePost();
+                screen.switchPanel("homepage", null);
             }
         });
     }
@@ -164,6 +180,22 @@ public class PostPanel extends JPanel {
         }
 
         screen.switchPanel("homepage", null);
+    }
+
+    /**
+     * Delete a post
+     */
+    private void deletePost() {
+        ArrayList<Group> groups = screen.getGroups();
+
+        // Delete the post if it is stored in user
+        screen.getMe().getContents().remove(post.getTitle());
+
+        // Delete the post if it is stored in group
+        for (Group group : groups) {
+            HashMap<String, Content> contents = group.getContents();
+            contents.remove(post.getTitle());
+        }
     }
 
     /**
