@@ -1,8 +1,10 @@
 package src.ui;
 
+import src.domain.Content;
 import src.domain.Group;
 import src.domain.User;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -13,11 +15,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
+
+import java.text.DateFormat;
 
 public class GroupPanel extends JPanel {
     MainScreen screen;
     Group group;
+    DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, new Locale("en", "US"));
     JButton homeButton = new JButton("Home");
     JButton joinButton = new JButton("Join");
     JButton removeMemberButton = new JButton("Remove Member");
@@ -44,8 +51,10 @@ public class GroupPanel extends JPanel {
         
         setGroup(groupName);
 
-        if (group.getMembers().containsKey(screen.getMe().getUsername()))
+        if (group.getMembers().containsKey(screen.getMe().getUsername())) {
             memberList();
+            postList();
+        }
 
         hobbieList();
 
@@ -263,5 +272,36 @@ public class GroupPanel extends JPanel {
             screen.switchPanel("post", postToModifyText.getText());
         else
             throw new Exception("Post \"" + postToModifyText.getText() + "\" does not belong to you");
+    }
+
+    /**
+     * Display the 5 last posts that were created in the group
+     */
+    private void postList() {
+        int index = 0;
+
+        ArrayList<Content> contents = new ArrayList<Content>(group.getContents().values());
+        Collections.sort(contents);
+        Collections.reverse(contents);
+
+        for (Content c : contents) {
+            if (index < 5) {
+                JLabel titleLabel = new JLabel(c.getTitle());
+                JLabel authorAndDateLabel = new JLabel(c.getAuthor() + " -  " + dateFormat.format(c.getDate()));
+                JLabel contentLabel = new JLabel(c.getContent());
+                JLabel pictureLabel = new JLabel(new ImageIcon(c.getPicture()));
+
+                authorAndDateLabel.setBounds(190, 40 + index * 100, 400, 20);
+                titleLabel.setBounds(190, 60 + (index * 100), 400, 20);
+                contentLabel.setBounds(190, 85 + (index * 100), 400, 20);
+                pictureLabel.setBounds(550, 40 + (index * 100), 64, 64);
+                index++;
+                add(authorAndDateLabel);
+                add(titleLabel);
+                add(contentLabel);
+                add(pictureLabel);
+            } else
+                break;
+        }
     }
 }

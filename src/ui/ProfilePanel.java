@@ -15,15 +15,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import java.io.File;
 
+import java.text.DateFormat;
+
 public class ProfilePanel extends JPanel {
     MainScreen screen;
     User user;
+    DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, new Locale("en", "US"));
     JButton homeButton = new JButton("Home");
     JButton logoutButton = new JButton("Logout");
     JButton deleteButton = new JButton("Delete account");
@@ -67,6 +72,9 @@ public class ProfilePanel extends JPanel {
         followList();
 
         groupList();
+
+        if (user.getUsername().equals(screen.getMe().getUsername()) || screen.getMe().isFollowing(user))
+            postList();
 
         setAllComponents();
 
@@ -471,9 +479,40 @@ public class ProfilePanel extends JPanel {
     private void modifyPost() throws Exception {
         if (postToModifyText.getText().isEmpty())
             throw new Exception("The post can't be empty");
-        if (screen.getMe().getContents().get(postToModifyText.getText()) == null)
+        if (user.getContents().get(postToModifyText.getText()) == null)
             throw new Exception("Post \"" + postToModifyText.getText() + "\" does not exist");
         else
             screen.switchPanel("post", postToModifyText.getText());
+    }
+
+    /**
+     * Display the 5 last posts that the user has created
+     */
+    private void postList() {
+        int index = 0;
+
+        ArrayList<Content> contents = new ArrayList<Content>(user.getContents().values());
+        Collections.sort(contents);
+        Collections.reverse(contents);
+
+        for (Content c : contents) {
+            if (index < 5) {
+                JLabel titleLabel = new JLabel(c.getTitle());
+                JLabel authorAndDateLabel = new JLabel(c.getAuthor() + " -  " + dateFormat.format(c.getDate()));
+                JLabel contentLabel = new JLabel(c.getContent());
+                JLabel pictureLabel = new JLabel(new ImageIcon(c.getPicture()));
+
+                authorAndDateLabel.setBounds(220, 50 + index * 100, 400, 20);
+                titleLabel.setBounds(220, 70 + (index * 100), 400, 20);
+                contentLabel.setBounds(220, 95 + (index * 100), 400, 20);
+                pictureLabel.setBounds(580, 50 + (index * 100), 64, 64);
+                index++;
+                add(authorAndDateLabel);
+                add(titleLabel);
+                add(contentLabel);
+                add(pictureLabel);
+            } else
+                break;
+        }
     }
 }

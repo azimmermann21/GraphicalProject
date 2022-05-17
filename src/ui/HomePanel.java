@@ -7,15 +7,22 @@ import src.domain.Searchable;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Locale;
+
+import java.text.DateFormat;
 
 public class HomePanel extends JPanel {
     MainScreen screen;
+    DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, new Locale("en", "US"));
     JButton logoutButton = new JButton("Logout");
     JButton profileButton = new JButton("Profile");
     JButton createPostButton = new JButton("Create post");
@@ -30,6 +37,8 @@ public class HomePanel extends JPanel {
         setSize(800, 600);
         setVisible(true);
         setLayout(null);
+
+        postList();
 
         setAllComponents();
 
@@ -138,5 +147,54 @@ public class HomePanel extends JPanel {
                         return content;
 
         throw new IllegalArgumentException("No User, Group or Content named " + searchBar.getText() + " has been found");
+    }
+
+    /**
+     * Display the 5 last posts that were created by the user I follow or created in the group I am in
+     */
+    private void postList() {
+        int index = 0;
+
+        ArrayList<Content> contents = getContentToDisplay();
+        Collections.sort(contents);
+        Collections.reverse(contents);
+
+        for (Content c : contents) {
+            if (index < 5) {
+                JLabel titleLabel = new JLabel(c.getTitle());
+                JLabel authorAndDateLabel = new JLabel(c.getAuthor() + " -  " + dateFormat.format(c.getDate()));
+                JLabel contentLabel = new JLabel(c.getContent());
+                JLabel pictureLabel = new JLabel(new ImageIcon(c.getPicture()));
+
+                authorAndDateLabel.setBounds(190, 40 + index * 100, 400, 20);
+                titleLabel.setBounds(190, 60 + (index * 100), 400, 20);
+                contentLabel.setBounds(190, 85 + (index * 100), 400, 20);
+                pictureLabel.setBounds(550, 40 + (index * 100), 64, 64);
+                index++;
+                add(authorAndDateLabel);
+                add(titleLabel);
+                add(contentLabel);
+                add(pictureLabel);
+            } else
+                break;
+        }
+    }
+
+    /**
+     * Get the post of the user I follow and created in the group I am in
+     */
+    private ArrayList<Content> getContentToDisplay() {
+        ArrayList<Content> contents = new ArrayList<Content>();
+
+        for (User user : screen.getMe().getFollowed().values())
+            for (Content content : user.getContents().values())
+                contents.add(content);
+
+        for (Group group : screen.getGroups())
+            if (group.getMembers().containsKey(screen.getMe().getUsername()))
+                for (Content content : group.getContents().values())
+                    contents.add(content);
+
+        return contents;
     }
 }

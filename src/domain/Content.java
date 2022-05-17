@@ -2,7 +2,7 @@ package src.domain;
 
 import java.util.Date;
 
-public class Content implements Searchable {
+public class Content implements Searchable, Comparable<Content> {
     private String title;
     private String content;
     private String author;
@@ -97,4 +97,14 @@ public class Content implements Searchable {
     public void setDate(Date date) {
         this.date = date;
     }
+
+    /**
+     * Compare two contents by their date
+     * @param content the content to compare
+     */
+    @Override
+    public int compareTo(Content content) {
+        return getDate().compareTo(content.getDate());
+    }
+
 }
