@@ -73,6 +73,7 @@ public class MainScreen extends JFrame {
         User johndoe = new User("johndoe", "John123", "john@doe.com", "John", "Doe", 21, "United States", false);
         User janedoe = new User("janedoe", "Jane123", "jane@doe.com", "Jane", "Doe", 21, "United States", false);
         User billylesinge = new User("billylesinge", "Louis123", "billy@lesinge.com", "Billy", "Lesinge", 15, "France", true);
+        User ouitest = new User("ouitest", "Louis123", "billy@lesinge.com", "Billy", "Lesinge", 15, "France", true);
         User louisleboss = new User("louisleboss", "Louis123", "louis@leboss.com", "Louis", "Christner", 21, "France", true);
         User hgvleboss = new User("hgvleboss", "Louis123", "hgv@leboss.com", "Hoang-Giang", "Vo", 21, "United States", true);
         User iboleboss = new User("iboleboss", "Louis123", "ibo@leboss.com", "Ibrahim", "Akgul", 21, "Turkey", true);
@@ -103,6 +104,7 @@ public class MainScreen extends JFrame {
         johndoe.setHobbies(hobbies);
         janedoe.setHobbies(hobbies2);
         billylesinge.setHobbies(hobbies3);
+        ouitest.setHobbies(hobbies3);
         louisleboss.setHobbies(hobbies);
         hgvleboss.setHobbies(hobbies2);
         iboleboss.setHobbies(hobbies3);
@@ -111,6 +113,7 @@ public class MainScreen extends JFrame {
         users.add(johndoe);
         users.add(janedoe);
         users.add(billylesinge);
+        users.add(ouitest);
         users.add(louisleboss);
         users.add(hgvleboss);
         users.add(iboleboss);

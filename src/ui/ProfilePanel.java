@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -255,16 +257,14 @@ public class ProfilePanel extends JPanel {
         userSuggestionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO: user Suggestion
-                System.out.println("Suggestion user");
+                suggestUsers();
             }
         });
 
         groupSuggestionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO: group suggestion
-                System.out.println("Suggestion group");
+                suggestGroups();
             }
         });
 
@@ -536,5 +536,99 @@ public class ProfilePanel extends JPanel {
             if (countries[i].equals(user.getCountry()))
                 return i;
         return 0;
+    }
+
+    /**
+     * Display the suggested users to the user
+     */
+    private void suggestUsers() {
+        ArrayList<User> users = screen.getUsers();
+        ArrayList<User> alreadyFollowed = new ArrayList<User>(user.getFollowed().values());
+        TreeMap<Integer, ArrayList<String>> suggestions = new TreeMap<Integer, ArrayList<String>>();
+        String suggestedString = "";
+        int i = 0;
+
+        users.remove(user);
+        users.removeAll(alreadyFollowed);
+
+        // Set the scores of each user
+        for (User u : users) {
+            int score = 0;
+            if (u.getCountry().equals(user.getCountry()))
+                score++;
+            for (String s : u.getHobbies())
+                if (user.getHobbies().contains(s))
+                    score++;
+            ArrayList<String> suggestionsList = suggestions.get(score);
+            if (suggestionsList == null)
+                suggestionsList = new ArrayList<String>();
+            suggestionsList.add(u.getUsername());
+            suggestions.put(score, suggestionsList);
+        }
+
+        // Get the list of suggestions with the highest score
+        ArrayList<String> suggestionsList = new ArrayList<String>();
+        for (ArrayList<String> userList : suggestions.values())
+            for (String s : userList)
+                suggestionsList.add(s);
+        Collections.reverse(suggestionsList);
+
+        // Display the suggestions
+        for (String s : suggestionsList) {
+            if (i < 5)
+                suggestedString += s + "\n";
+            else
+                break;
+            i++;
+        }
+        JOptionPane.showMessageDialog(this, suggestedString, "Suggested Users", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
+     * Display the suggested groups to the user
+     */
+    private void suggestGroups() {
+        ArrayList<Group> groups = screen.getGroups();
+        ArrayList<Group> notMyGroups = new ArrayList<Group>();
+        TreeMap<Integer, ArrayList<String>> suggestions = new TreeMap<Integer, ArrayList<String>>();
+        String suggestedString = "";
+        int i = 0;
+
+        // Get the list of groups that the user is not in
+        for (Group g : groups)
+            if (!g.getMembers().containsKey(user.getUsername()))
+                notMyGroups.add(g);
+
+        // Set the scores of each group
+        for (Group g : notMyGroups) {
+            int score = 0;
+            if (g.getCountry().equals(user.getCountry()))
+                score++;
+            for (String s : g.getHobbies())
+                if (user.getHobbies().contains(s))
+                    score++;
+            ArrayList<String> suggestionsList = suggestions.get(score);
+            if (suggestionsList == null)
+                suggestionsList = new ArrayList<String>();
+            suggestionsList.add(g.getName());
+            suggestions.put(score, suggestionsList);
+        }
+
+        // Get the list of suggestions with the highest score
+        ArrayList<String> suggestionsList = new ArrayList<String>();
+        for (ArrayList<String> groupList : suggestions.values())
+            for (String s : groupList)
+                suggestionsList.add(s);
+        Collections.reverse(suggestionsList);
+
+        // Display the suggestions
+        for (String s : suggestionsList) {
+            if (i < 2)
+                suggestedString += s + "\n";
+            else
+                break;
+            i++;
+        }
+        JOptionPane.showMessageDialog(this, suggestedString, "Suggested Groups", JOptionPane.INFORMATION_MESSAGE);
     }
 }
