@@ -13,15 +13,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class HomePanel extends JPanel {
     MainScreen screen;
     JButton logoutButton = new JButton("Logout");
     JButton profileButton = new JButton("Profile");
-    JTextField searchBar = new JTextField();
+    JButton createPostButton = new JButton("Create post");
     JButton searchButton = new JButton("Search");
+    JTextField searchBar = new JTextField();
 
+    /**
+     * Create the panel
+     */
     public HomePanel(MainScreen screen) {
         this.screen = screen;
         setSize(800, 600);
@@ -35,20 +38,31 @@ public class HomePanel extends JPanel {
         listenButtons();
     }
 
+    /**
+     * Set all the components properties and their bounds
+     */
     private void setAllComponents() {
         logoutButton.setBounds(3, 3,100,25);
         profileButton.setBounds(681, 3,100,25);
-        searchBar.setBounds(140, 3, 400, 25);
+        createPostButton.setBounds(3, 531, 150, 25);
         searchButton.setBounds(540, 3, 100, 25);
+        searchBar.setBounds(140, 3, 400, 25);
     }
 
+    /**
+     * Add all the components to the panel
+     */
     private void addAllComponents() {
         add(logoutButton);
         add(profileButton);
-        add(searchBar);
+        add(createPostButton);
         add(searchButton);
+        add(searchBar);
     }
 
+    /**
+     * Listen to the buttons and perform the corresponding actions
+     */
     private void listenButtons() {
         logoutButton.addActionListener(new ActionListener() {
             @Override
@@ -88,30 +102,40 @@ public class HomePanel extends JPanel {
                 }
             }
         });
+
+        createPostButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                screen.switchPanel("createPost", null);
+            }
+        });
     }
 
+    /**
+     * Search for a user, group, content by name or title
+     */
     private Searchable search() {
         ArrayList<User> users = screen.getUsers();
         ArrayList<Group> groups = screen.getGroups();
-        HashMap<String, Content> contents = screen.getAllContent();
 
-        for (User user : users) {
-            if (user.getUsername().equals(searchBar.getText())) {
+        for (User user : users)
+            if (user.getUsername().equals(searchBar.getText()))
                 return user;
-            }
-        }
 
-        for (Group group : groups) {
-            if (group.getName().equals(searchBar.getText())) {
+        for (Group group : groups)
+            if (group.getName().equals(searchBar.getText()))
                 return group;
-            }
-        }
 
-        for (Content content : contents.values()) {
-            if (content.getTitle().equals(searchBar.getText())) {
-                return content;
-            }
-        }
+        for (User user : screen.getMe().getFollowed().values())
+            for (Content content : user.getContents().values())
+                if (content.getTitle().equals(searchBar.getText()))
+                    return content;
+        
+        for (Group group : groups)
+            if (group.getMembers().containsKey(screen.getMe().getUsername()))
+                for (Content content : group.getContents().values())
+                    if (content.getTitle().equals(searchBar.getText()))
+                        return content;
 
         throw new IllegalArgumentException("No User, Group or Content named " + searchBar.getText() + " has been found");
     }

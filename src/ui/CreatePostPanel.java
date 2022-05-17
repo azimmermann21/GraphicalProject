@@ -138,7 +138,6 @@ public class CreatePostPanel extends JPanel {
         else
             screen.getMe().addContent(content);
 
-        //TODO: change to post panel
         screen.switchPanel("homepage", content.getTitle());
     }
 
@@ -151,8 +150,6 @@ public class CreatePostPanel extends JPanel {
         ArrayList<User> users = screen.getUsers();
         ArrayList<Group> groups = screen.getGroups();
         HashMap<String, Content> content = screen.getAllContent();
-
-        //TODO: Test this for content
 
         for(User user : users)
             if(user.getUsername().equals(title))

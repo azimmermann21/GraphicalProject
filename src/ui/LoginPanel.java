@@ -24,6 +24,9 @@ public class LoginPanel extends JPanel {
     JButton registerButton = new JButton("Register yourself !");
 
 
+    /**
+     * Create the panel
+     */
     public LoginPanel(MainScreen screen) {
         this.screen = screen;
         setSize(800, 600);
@@ -37,6 +40,9 @@ public class LoginPanel extends JPanel {
         listenButtons();
     }
 
+    /**
+     * Set all the components properties and their bounds
+     */
     private void setAllComponents() {
         loginLabel.setText("Login");
         loginLabel.setBounds(360,120,80,40);
@@ -51,6 +57,9 @@ public class LoginPanel extends JPanel {
         registerButton.setBounds(275,360,250,40);
     }
 
+    /**
+     * Add all the components to the panel
+     */
     private void addAllComponents() {
         add(loginLabel);
         add(usernameLabel);
@@ -61,6 +70,9 @@ public class LoginPanel extends JPanel {
         add(registerButton);
     }
 
+    /**
+     * Listen to the buttons and perform the corresponding actions
+     */
     private void listenButtons() {
         loginButton.addActionListener(new ActionListener() {
             @Override
@@ -85,6 +97,12 @@ public class LoginPanel extends JPanel {
         });
     }
 
+    /**
+     * Login the user with the given username and password
+     * @return the user
+     * @throws Exception if the user doesn't exist
+     * @throws Exception if the password is wrong
+     */
     private User login() throws Exception {
         ArrayList<User> users = screen.getUsers();
 

@@ -23,13 +23,15 @@ public class GroupPanel extends JPanel {
     JButton removeMemberButton = new JButton("Remove Member");
     JButton deleteGroupButton = new JButton("Delete Group");
     JButton createPostButton = new JButton("Create Post");
+    JButton modifyPostButton = new JButton("Modify post");
     JLabel groupLabel = new JLabel();
     JLabel countryLabel = new JLabel("Country:");
     JLabel countryNameLabel = new JLabel();
     JLabel hobbiesLabel = new JLabel("Hobbies:");
     JLabel membersLabel = new JLabel();
     JLabel creatorLabel = new JLabel();
-    JTextField removeMemberField = new JTextField();
+    JTextField removeMemberText = new JTextField();
+    JTextField postToModifyText = new JTextField();
 
     /**
      * Create the panel
@@ -65,6 +67,7 @@ public class GroupPanel extends JPanel {
         removeMemberButton.setBounds(631, 533,150,25);
         deleteGroupButton.setBounds(315, 533,150,25);
         createPostButton.setBounds(3, 515,150,25);
+        modifyPostButton.setBounds(3, 478, 150, 25);
         groupLabel.setText(group.getName());
         groupLabel.setBounds(3,3,150,25);
         groupLabel.setFont(new Font("Serif", Font.BOLD, 20));
@@ -76,7 +79,8 @@ public class GroupPanel extends JPanel {
         membersLabel.setBounds(681, 30, 100, 25);
         creatorLabel.setText("Group by : " + group.getCreator().getUsername());
         creatorLabel.setBounds(3, 540, 150, 25);
-        removeMemberField.setBounds(631, 507, 150, 25);
+        removeMemberText.setBounds(631, 507, 150, 25);
+        postToModifyText.setBounds(3, 450, 150, 25);
     }
 
     /**
@@ -94,13 +98,15 @@ public class GroupPanel extends JPanel {
         else {
             add(deleteGroupButton);
             add(removeMemberButton);
-            add(removeMemberField);
+            add(removeMemberText);
         }
 
         if (group.getMembers().containsKey(screen.getMe().getUsername())) {
             add(membersLabel);
             add(creatorLabel);
             add(createPostButton);
+            add(modifyPostButton);
+            add(postToModifyText);
         }
     }
 
@@ -133,7 +139,7 @@ public class GroupPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    removeMember(removeMemberField.getText());
+                    removeMember(removeMemberText.getText());
                 } catch (Exception error) {
                     System.out.println(error.getMessage());
                 }
@@ -152,6 +158,17 @@ public class GroupPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 screen.switchPanel("createPost", group.getName());
+            }
+        });
+
+        modifyPostButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    modifyPost();
+                } catch (Exception error) {
+                    System.out.println(error.getMessage());
+                }
             }
         });
     }
@@ -229,5 +246,22 @@ public class GroupPanel extends JPanel {
             updatePage();
         } else
             throw new Exception("User " + username + " not found");
+    }
+
+    /**
+     * Modify a post
+     * @throws Exception if the post to modify is empty
+     * @throws Exception if the post to modify is not in the group
+     * @throws Exception if the post to modify is don't belong to the user
+     */
+    private void modifyPost() throws Exception {
+        if (postToModifyText.getText().isEmpty())
+            throw new Exception("The post can't be empty");
+        if (group.getContents().get(postToModifyText.getText()) == null)
+            throw new Exception("Post \"" + postToModifyText.getText() + "\" does not exist");
+        else if (group.getContents().get(postToModifyText.getText()).getAuthor().equals(screen.getMe().getUsername()))
+            screen.switchPanel("post", postToModifyText.getText());
+        else
+            throw new Exception("Post \"" + postToModifyText.getText() + "\" does not belong to you");
     }
 }

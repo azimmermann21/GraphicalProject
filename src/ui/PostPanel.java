@@ -137,6 +137,10 @@ public class PostPanel extends JPanel {
 
     /**
      * Edit a post
+     * @throws Exception if the post text is empty
+     * @throws Exception if the post title is invalid
+     * @throws Exception if the post title already exists
+     * @throws Exception if the post content is empty or invalid
      */
     private void editPost() throws Exception {
         if (postTitleText.getText().equals(""))
@@ -207,8 +211,6 @@ public class PostPanel extends JPanel {
         ArrayList<User> users = screen.getUsers();
         ArrayList<Group> groups = screen.getGroups();
         HashMap<String, Content> content = screen.getAllContent();
-
-        //TODO: Test this for content
 
         if (title.equals(post.getTitle()))
             return true;

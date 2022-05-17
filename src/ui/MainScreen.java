@@ -27,6 +27,9 @@ public class MainScreen extends JFrame {
         new MainScreen();
     }
 
+    /**
+     * Create the frame.
+     */
     public MainScreen() {
         setTitle("Social Network");
         setSize(800, 600);
@@ -39,9 +42,9 @@ public class MainScreen extends JFrame {
     }
 
     /**
+     * Switches the content pane of the frame to the given panel
      * @param panel the panel to set as the content pane
      * @param arg an argument that can be passed to a panel
-     * Switches the content pane of the frame to the given panel
      */
     public void switchPanel(String panelName, String arg) {
         if (panelName == "login")
@@ -133,53 +136,57 @@ public class MainScreen extends JFrame {
     }
 
     /**
-     * @return the users
      * Get all users in the system
+     * @return the users
      */
     public ArrayList<User> getUsers() {
         return users;
     }
 
     /**
-     * @param users the users to set
      * Set all users in the system
+     * @param users the users to set
      */
     public void setUsers(ArrayList<User> users) {
         this.users = users;
     }
 
     /**
-     * @return the groups
      * Get all groups in the system
+     * @return the groups
      */
     public ArrayList<Group> getGroups() {
         return groups;
     }
 
     /**
-     * @param groups the groups to set
      * Set all groups in the system
+     * @param groups the groups to set
      */
     public void setGroups(ArrayList<Group> groups) {
         this.groups = groups;
     }
 
     /**
-     * @return the me
      * Get the current user
+     * @return the me
      */
     public User getMe() {
         return me;
     }
 
     /**
-     * @param me the me to set
      * Set the current user
+     * @param me the me to set
      */
     public void setMe(User me) {
         this.me = me;
     }
 
+    /**
+     * Get all posts in the system
+     * @return all posts in the system
+     */
     public HashMap<String, Content> getAllContent() {
         HashMap<String, Content> allContent = new HashMap<String, Content>();
 

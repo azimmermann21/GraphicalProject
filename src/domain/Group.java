@@ -20,96 +20,96 @@ public class Group implements Searchable {
     }
 
     /**
-     * @return the name of the group
      * Get the name of the group
+     * @return the name of the group
      */
     public String getName() {
         return name;
     }
 
     /**
-     * @param name the name to set
      * Set the name of the group
+     * @param name the name to set
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * @return the country of the group
      * Get the country of the group
+     * @return the country of the group
      */
     public String getCountry() {
         return country;
     }
 
     /**
-     * @param country the country to set
      * Set the country of the group
+     * @param country the country to set
      */
     public void setCountry(String country) {
         this.country = country;
     }
 
     /**
-     * @return the creator of the group
      * Get the creator of the group
+     * @return the creator of the group
      */
     public User getCreator() {
         return creator;
     }
 
     /**
-     * @param creator the creator to set
      * Set the creator of the group
+     * @param creator the creator to set
      */
     public void setCreator(User creator) {
         this.creator = creator;
     }
 
     /**
-     * @return the hobbies of the group
      * Get the hobbies of the group
+     * @return the hobbies of the group
      */
     public ArrayList<String> getHobbies() {
         return hobbies;
     }
 
     /**
-     * @param hobbies the hobbies to set
      * Set the hobbies of the group
+     * @param hobbies the hobbies to set
      */
     public void setHobbies(ArrayList<String> hobbies) {
         this.hobbies = hobbies;
     }
 
     /**
-     * @return the members of the group
      * Get the members of the group
+     * @return the members of the group
      */
     public HashMap<String, User> getMembers() {
         return members;
     }
 
     /**
-     * @param members the members to set
      * Set the members of the group
+     * @param members the members to set
      */
     public void setMembers(HashMap<String, User> members) {
         this.members = members;
     }
 
     /**
-     * @return the contents of the group
      * Get the contents of the group
+     * @return the contents of the group
      */
     public HashMap<String, Content> getContents() {
         return contents;
     }
 
     /**
-     * @param contents the contents to set
      * Set the contents of the group
+     * @param contents the contents to set
      */
     public void setContents(HashMap<String, Content> contents) {
         this.contents = contents;
@@ -132,8 +132,8 @@ public class Group implements Searchable {
     }
 
     /**
-     * @param content the content to add
      * Add the content to the contents of the group
+     * @param content the content to add
      */
     public void addContent(Content content) {
         contents.put(content.getTitle(), content);

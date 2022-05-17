@@ -1,6 +1,7 @@
 package src.ui;
 
 import src.domain.User;
+import src.domain.Content;
 import src.domain.Group;
 
 import javax.swing.JPanel;
@@ -33,6 +34,7 @@ public class ProfilePanel extends JPanel {
     JButton groupSuggestionButton = new JButton("Suggest groups");
     JButton createPostButton = new JButton("Create post");
     JButton createGroupButton = new JButton("Create group");
+    JButton modifyPostButton = new JButton("Modify post");
     JLabel followedLabel = new JLabel();
     JLabel groupsLabel = new JLabel();
     JLabel profilePicture = new JLabel();
@@ -49,7 +51,11 @@ public class ProfilePanel extends JPanel {
     JTextField emailText = new JTextField();
     JTextField ageText = new JTextField();
     JTextField hobbiesText = new JTextField();
+    JTextField postToModifyText = new JTextField();
 
+    /**
+     * Create the panel
+     */
     public ProfilePanel(MainScreen screen, String username) {
         this.screen = screen;
         setSize(800, 600);
@@ -69,6 +75,9 @@ public class ProfilePanel extends JPanel {
         listenButtons();
     }
 
+    /**
+     * Set all the components properties and their bounds
+     */
     private void setAllComponents() {
         if (screen.getMe().isFollowing(user))
             followButton.setText("Unfollow");
@@ -82,6 +91,7 @@ public class ProfilePanel extends JPanel {
         groupSuggestionButton.setBounds(655, 531, 125, 25);
         createGroupButton.setBounds(3, 501, 150, 25);
         createPostButton.setBounds(3, 531, 150, 25);
+        modifyPostButton.setBounds(3, 460, 150, 25);
         followedLabel.setText(user.getFollowed().size() + " Follow :");
         followedLabel.setBounds(681, 30, 100, 25);
         groupsLabel.setText(getGroupNumber() + " Groups :");
@@ -113,8 +123,12 @@ public class ProfilePanel extends JPanel {
         ageText.setBounds(12, 265, 100, 25);
         hobbiesText.setText(getHobbies());
         hobbiesText.setBounds(12, 295, 200, 25);
+        postToModifyText.setBounds(3, 432, 150, 25);
     }
 
+    /**
+     * Add all the components to the panel
+     */
     private void addAllComponents() {
         add(homeButton);
         add(logoutButton);
@@ -140,17 +154,22 @@ public class ProfilePanel extends JPanel {
             add(emailText);
             add(ageText);
             add(hobbiesText);
+            add(postToModifyText);
             add(editButton);
             add(deleteButton);
             add(pictureButton);
             add(userSuggestionButton);
             add(groupSuggestionButton);
             add(createPostButton);
+            add(modifyPostButton);
             if (user.getPremium())
                 add(createGroupButton);
         }
     }
 
+    /**
+     * Listen to the buttons and perform the corresponding actions
+     */
     private void listenButtons() {
         homeButton.addActionListener(new ActionListener() {
             @Override
@@ -218,7 +237,7 @@ public class ProfilePanel extends JPanel {
         userSuggestionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO:
+                //TODO: user Suggestion
                 System.out.println("Suggestion user");
             }
         });
@@ -226,7 +245,7 @@ public class ProfilePanel extends JPanel {
         groupSuggestionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO:
+                //TODO: group suggestion
                 System.out.println("Suggestion group");
             }
         });
@@ -244,8 +263,23 @@ public class ProfilePanel extends JPanel {
                 screen.switchPanel("createGroup", null);
             }
         });
+
+        modifyPostButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    modifyPost();
+                } catch (Exception error) {
+                    System.out.println(error.getMessage());
+                }
+            }
+        });
     }
 
+    /**
+     * Set the user of the page
+     * @param username the username of the user
+     */
     public void setUser(String username) {
         if (username.equals("me"))
             user = screen.getMe();
@@ -262,10 +296,16 @@ public class ProfilePanel extends JPanel {
         usernameLabel.setText(user.getUsername());
     }
 
+    /**
+     * Updates the page by refreshing it
+     */
     public void updatePage() {
         screen.switchPanel("profile", user.getUsername());
     }
 
+    /**
+     * Display the users followed by the user 
+     */
     private void followList() {
         HashMap<String, User> followed = user.getFollowed();
         int xGap = 0;
@@ -279,6 +319,10 @@ public class ProfilePanel extends JPanel {
         }
     }
 
+    /**
+     * Get the number of groups the user is in
+     * @return int number of groups
+     */
     private int getGroupNumber() {
         int groupNumber = 0;
 
@@ -289,6 +333,9 @@ public class ProfilePanel extends JPanel {
         return groupNumber;
     }
 
+    /**
+     * Display the groups that the user is in
+     */
     private void groupList() {
         int xGap = 0;
 
@@ -303,6 +350,10 @@ public class ProfilePanel extends JPanel {
         }
     }
 
+    /**
+     * Edits the user's information
+     * @throws Exception if the age, email, first name, last name are not valid
+     */
     private void editUser() throws Exception {
 
         Pattern pattern = Pattern.compile("^[A-Za-z0-9+_.-]+@.+\\..+$");
@@ -365,11 +416,24 @@ public class ProfilePanel extends JPanel {
             HashMap<String, User> followed = u.getFollowed();
             followed.remove(user.getUsername());
         }
+        // Search and delete contents that have the user as author in all groups
+        for (Group g : groups) {
+            ArrayList<Content> contentsToDelete = new ArrayList<>();    
+            for (Content c : g.getContents().values())
+                if (c.getAuthor().equals(user.getUsername()))
+                    contentsToDelete.add(c);
+            // Delete contents that have the user as author
+            for (Content c : contentsToDelete)
+                g.getContents().remove(c.getTitle());
+        }
 
-        //TODO: remove posts
         screen.switchPanel("login", null);
     }
 
+    /**
+     * Get a string of the user's hobbies, separated by spaces
+     * @return String of the user's hobbies
+     */
     private String getHobbies() {
         String hobbies = "";
         for (String s : user.getHobbies()) {
@@ -378,6 +442,10 @@ public class ProfilePanel extends JPanel {
         return hobbies;
     }
     
+    /**
+     * Get an imageIcon of the user's profile picture if it exists and is valid, otherwise return null
+     * @return ImageIcon of the user's profile picture
+     */
     private ImageIcon getProfilePicture() {
         Matcher matcherpng;
         Matcher matcherjpg;
@@ -393,5 +461,19 @@ public class ProfilePanel extends JPanel {
                 return new ImageIcon(user.getProfilePicture());
         }
         return defaultPicture;
+    }
+
+    /**
+     * Modify a post
+     * @throws Exception if the post to modify is empty
+     * @throws Exception if the post to modify is not in the user
+     */
+    private void modifyPost() throws Exception {
+        if (postToModifyText.getText().isEmpty())
+            throw new Exception("The post can't be empty");
+        if (screen.getMe().getContents().get(postToModifyText.getText()) == null)
+            throw new Exception("Post \"" + postToModifyText.getText() + "\" does not exist");
+        else
+            screen.switchPanel("post", postToModifyText.getText());
     }
 }
