@@ -10,19 +10,21 @@ public class User implements Searchable {
     private String firstName;
     private String lastName;
     private int age;
+    private String country;
     private boolean premium;
     private String profilePicture;
     private ArrayList<String> hobbies = new ArrayList<String>();
     private HashMap<String, User> followed = new HashMap<String, User>();
     private HashMap<String, Content> contents = new HashMap<String, Content>();
 
-    public User(String username, String password, String email, String firstName, String lastName, int age, boolean premium) {
+    public User(String username, String password, String email, String firstName, String lastName, int age, String country, boolean premium) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
+        this.country = country;
         this.premium = premium;
     }
 
@@ -120,6 +122,22 @@ public class User implements Searchable {
      */
     public void setAge(int age) {
         this.age = age;
+    }
+
+    /**
+     * Get the country of the user
+     * @return the country of the user
+     */
+    public String getCountry() {
+        return country;
+    }
+
+    /**
+     * Set the country of the user
+     * @param country the country to set
+     */
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     /**

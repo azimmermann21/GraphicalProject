@@ -1,38 +1,43 @@
 package src.ui;
 
+import src.domain.Group;
+import src.domain.User;
+import src.domain.Content;
+
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import src.domain.Group;
-import src.domain.User;
-import src.domain.Content;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Font;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.awt.Font;
 
 public class RegisterPanel extends JPanel {
     MainScreen screen;
-    JLabel registerLabel = new JLabel();
-    JLabel usernameLabel = new JLabel();
+    String[] countries = {"France", "Germany", "Spain", "Italy", "United Kingdom", "United States", "Canada", "Australia", "New Zealand", "Turkey", "Russia", "China", "Japan", "India", "Brazil", "Argentina", "Mexico", "Portugal", "Poland", "Sweden", "Denmark", "Norway"};
+    JLabel registerLabel = new JLabel("Register");
+    JLabel usernameLabel = new JLabel("Username");
     JTextField usernameText = new JTextField();
-    JLabel passwordLabel = new JLabel();
+    JLabel passwordLabel = new JLabel("Password");
     JPasswordField passwordText = new JPasswordField();
-    JLabel emailLabel = new JLabel();
+    JLabel emailLabel = new JLabel("Email");
     JTextField emailText = new JTextField();
-    JLabel firstNameLabel = new JLabel();
+    JLabel firstNameLabel = new JLabel("First name");
     JTextField firstNameText = new JTextField();
-    JLabel lastNameLabel = new JLabel();
+    JLabel lastNameLabel = new JLabel("Last name");
     JTextField lastNameText = new JTextField();
-    JLabel ageLabel = new JLabel();
+    JLabel ageLabel = new JLabel("Age");
     JTextField ageText = new JTextField();
+    JLabel countryLabel = new JLabel("Country");
+    JComboBox<String> countryText = new JComboBox<String>(countries);
     JButton registerButton = new JButton("Register");
     JButton loginButton = new JButton("Already have an account ? Login");
 
@@ -56,29 +61,24 @@ public class RegisterPanel extends JPanel {
      * Set all the components properties and their bounds
      */
     private void setAllComponents() {
-        registerLabel.setText("Register");
         registerLabel.setBounds(340,20,160,40);
         registerLabel.setFont(new Font("Arial", Font.BOLD, 30));
-        usernameLabel.setText("Username");
-        usernameLabel.setBounds(370,80,80,40);
-        usernameText.setBounds(325,115,150,18);
-        passwordLabel.setText("Password");
-        passwordLabel.setBounds(370,135,80,40);
-        passwordText.setBounds(325,170,150,18);
-        emailLabel.setText("Email");
-        emailLabel.setBounds(370,190,80,40);
-        emailText.setBounds(325,225,150,18);
-        firstNameLabel.setText("First name");
-        firstNameLabel.setBounds(370,245,80,40);
-        firstNameText.setBounds(325,280,150,18);
-        lastNameLabel.setText("Last name");
-        lastNameLabel.setBounds(370,300,80,40);
-        lastNameText.setBounds(325,335,150,18);
-        ageLabel.setText("Age");
-        ageLabel.setBounds(370,355,80,40);
-        ageText.setBounds(325,390,150,18);
-        registerButton.setBounds(275,430,250,40);
-        loginButton.setBounds(275,480,250,40);
+        usernameLabel.setBounds(370,70,80,40);
+        usernameText.setBounds(325,105,150,18);
+        passwordLabel.setBounds(370,120,80,40);
+        passwordText.setBounds(325,155,150,18);
+        emailLabel.setBounds(370,170,80,40);
+        emailText.setBounds(325,205,150,18);
+        firstNameLabel.setBounds(370,220,80,40);
+        firstNameText.setBounds(325,255,150,18);
+        lastNameLabel.setBounds(370,270,80,40);
+        lastNameText.setBounds(325,305,150,18);
+        ageLabel.setBounds(370,320,80,40);
+        ageText.setBounds(325,355,150,18);
+        countryLabel.setBounds(370,370,80,40);
+        countryText.setBounds(325,405,150,18);
+        registerButton.setBounds(275,450,250,40);
+        loginButton.setBounds(275,500,250,40);
     }
     
     /**
@@ -98,6 +98,8 @@ public class RegisterPanel extends JPanel {
         add(lastNameText);
         add(ageLabel);
         add(ageText);
+        add(countryLabel);
+        add(countryText);
         add(registerButton);
         add(loginButton);
     }
@@ -162,7 +164,7 @@ public class RegisterPanel extends JPanel {
         if (age < 15 || age > 100)
             throw new Exception("Age must be between 15 and 100");
 
-        return new User(usernameText.getText(), passwordText.getText(), emailText.getText(), firstNameText.getText(), lastNameText.getText(), age, false);
+        return new User(usernameText.getText(), passwordText.getText(), emailText.getText(), firstNameText.getText(), lastNameText.getText(), age, countryText.getSelectedItem().toString(), false);
     }
 
     /**

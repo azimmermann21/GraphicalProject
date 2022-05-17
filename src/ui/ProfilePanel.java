@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 
@@ -28,6 +29,7 @@ import java.text.DateFormat;
 public class ProfilePanel extends JPanel {
     MainScreen screen;
     User user;
+    String[] countries = {"France", "Germany", "Spain", "Italy", "United Kingdom", "United States", "Canada", "Australia", "New Zealand", "Turkey", "Russia", "China", "Japan", "India", "Brazil", "Argentina", "Mexico", "Portugal", "Poland", "Sweden", "Denmark", "Norway"};
     DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, new Locale("en", "US"));
     JButton homeButton = new JButton("Home");
     JButton logoutButton = new JButton("Logout");
@@ -50,12 +52,14 @@ public class ProfilePanel extends JPanel {
     JLabel emailLabel = new JLabel();
     JLabel ageLabel = new JLabel();
     JLabel hobbiesLabel = new JLabel();
+    JLabel countryLabel = new JLabel();
     JLabel hobbiesList = new JLabel();
     JTextField firstNameText = new JTextField();
     JTextField lastNameText = new JTextField();
     JTextField emailText = new JTextField();
     JTextField ageText = new JTextField();
     JTextField hobbiesText = new JTextField();
+    JComboBox<String> countryText = new JComboBox<String>(countries);
     JTextField postToModifyText = new JTextField();
 
     /**
@@ -92,8 +96,8 @@ public class ProfilePanel extends JPanel {
         homeButton.setBounds(681, 3,100,25);
         logoutButton.setBounds(3, 3,100,25);
         followButton.setBounds(3, 125, 100, 25);
-        editButton.setBounds(3, 330, 150, 25);
-        deleteButton.setBounds(3, 360,150,25);
+        editButton.setBounds(3, 360, 150, 25);
+        deleteButton.setBounds(325, 531,150,25);
         pictureButton.setBounds(3, 390, 150, 25);
         userSuggestionButton.setBounds(655, 501, 125, 25);
         groupSuggestionButton.setBounds(655, 531, 125, 25);
@@ -117,6 +121,8 @@ public class ProfilePanel extends JPanel {
         emailLabel.setBounds(12, 210, 150, 25);
         ageLabel.setText(user.getAge() + "");
         ageLabel.setBounds(12, 230, 100, 25);
+        countryLabel.setText(user.getCountry());
+        countryLabel.setBounds(12, 250, 100, 25);
         hobbiesLabel.setText("Hobbies :");
         hobbiesLabel.setBounds(110, 3, 70, 25);
         hobbiesList.setText(getHobbies());
@@ -131,6 +137,8 @@ public class ProfilePanel extends JPanel {
         ageText.setBounds(12, 265, 100, 25);
         hobbiesText.setText(getHobbies());
         hobbiesText.setBounds(12, 295, 200, 25);
+        countryText.setSelectedIndex(getCountryIndex());
+        countryText.setBounds(12, 325, 100, 25);
         postToModifyText.setBounds(3, 432, 150, 25);
     }
 
@@ -153,6 +161,7 @@ public class ProfilePanel extends JPanel {
             if (screen.getMe().isFollowing(user)) {
                 add(emailLabel);
                 add(ageLabel);
+                add(countryLabel);
                 add(hobbiesLabel);
                 add(hobbiesList);
             }
@@ -161,6 +170,7 @@ public class ProfilePanel extends JPanel {
             add(lastNameText);
             add(emailText);
             add(ageText);
+            add(countryText);
             add(hobbiesText);
             add(postToModifyText);
             add(editButton);
@@ -393,6 +403,7 @@ public class ProfilePanel extends JPanel {
         user.setLastName(lastNameText.getText());
         user.setEmail(emailText.getText());
         user.setAge(Integer.parseInt(ageText.getText()));
+        user.setCountry(countryText.getSelectedItem().toString());
         user.setHobbies(hobbies);
     }
 
@@ -514,5 +525,16 @@ public class ProfilePanel extends JPanel {
             } else
                 break;
         }
+    }
+
+    /**
+     * Get the index of the country of the user in the country list
+     * @return index of the country of the user in the country list
+     */
+    private int getCountryIndex() {
+        for (int i = 0; i < countries.length; i++)
+            if (countries[i].equals(user.getCountry()))
+                return i;
+        return 0;
     }
 }

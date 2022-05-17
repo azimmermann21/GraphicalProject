@@ -70,35 +70,35 @@ public class MainScreen extends JFrame {
      * Creates dummy datas for testing purposes
      */
     public void createDummyDatas() {
-        User johndoe = new User("johndoe", "John123", "john@doe.com", "John", "Doe", 21, false);
-        User janedoe = new User("janedoe", "Jane123", "jane@doe.com", "Jane", "Doe", 21, false);
-        User billylesinge = new User("billylesinge", "Louis123", "billy@lesinge.com", "Billy", "Lesinge", 15, true);
-        User louisleboss = new User("louisleboss", "Louis123", "louis@leboss.com", "Louis", "Christner", 21, true);
-        User hgvleboss = new User("hgvleboss", "Louis123", "hgv@leboss.com", "Hoang-Giang", "Vo", 21, true);
-        User iboleboss = new User("iboleboss", "Louis123", "ibo@leboss.com", "Ibrahim", "Akgul", 21, true);
-        User matleboss = new User("matleboss", "Louis123", "mat@leboss.com", "Matthieu", "Houlle", 21, true);
+        User johndoe = new User("johndoe", "John123", "john@doe.com", "John", "Doe", 21, "United States", false);
+        User janedoe = new User("janedoe", "Jane123", "jane@doe.com", "Jane", "Doe", 21, "United States", false);
+        User billylesinge = new User("billylesinge", "Louis123", "billy@lesinge.com", "Billy", "Lesinge", 15, "France", true);
+        User louisleboss = new User("louisleboss", "Louis123", "louis@leboss.com", "Louis", "Christner", 21, "France", true);
+        User hgvleboss = new User("hgvleboss", "Louis123", "hgv@leboss.com", "Hoang-Giang", "Vo", 21, "United States", true);
+        User iboleboss = new User("iboleboss", "Louis123", "ibo@leboss.com", "Ibrahim", "Akgul", 21, "Turkey", true);
+        User matleboss = new User("matleboss", "Louis123", "mat@leboss.com", "Matthieu", "Houlle", 21, "Turkey", true);
         
         ArrayList<String> hobbies = new ArrayList<String>();
-        hobbies.add("Football");
-        hobbies.add("Coding");
+        hobbies.add("football");
+        hobbies.add("coding");
 
         ArrayList<String> hobbies2 = new ArrayList<String>();
-        hobbies2.add("Reading");
-        hobbies2.add("Gaming");
+        hobbies2.add("reading");
+        hobbies2.add("gaming");
 
         ArrayList<String> hobbies3 = new ArrayList<String>();
-        hobbies3.add("Gaming");
-        hobbies3.add("Coding");
+        hobbies3.add("gaming");
+        hobbies3.add("coding");
 
         ArrayList<String> hobbies4 = new ArrayList<String>();
-        hobbies4.add("Football");
-        hobbies4.add("Coding");
-        hobbies4.add("Reading");
+        hobbies4.add("football");
+        hobbies4.add("coding");
+        hobbies4.add("reading");
 
         ArrayList<String> hobbies5 = new ArrayList<String>();
-        hobbies5.add("Basketball");
-        hobbies5.add("Gaming");
-        hobbies5.add("Cooking");
+        hobbies5.add("basketball");
+        hobbies5.add("gaming");
+        hobbies5.add("cooking");
 
         johndoe.setHobbies(hobbies);
         janedoe.setHobbies(hobbies2);
