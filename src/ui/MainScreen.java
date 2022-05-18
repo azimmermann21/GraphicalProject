@@ -70,7 +70,7 @@ public class MainScreen extends JFrame {
      * Creates dummy datas for testing purposes
      */
     public void createDummyDatas() {
-        User user1 = new User("user1", "password1", "user1@example.com", "user1Name", "user1Surname", 21, "United States", false);
+        User user1 = new User("user1", "password1", "user1@example.com", "user1Name", "user1Surname", 21, "United States", true);
         User user2 = new User("user2", "password2", "user2@example.com", "user2Name", "user2Surname", 21, "United States", false);
         User user3 = new User("user3", "password3", "user3@example.com", "user3Name", "user3Surname", 21, "United States", false);
         User user4 = new User("user4", "password4", "user4@example.com", "user4Name", "user4Surname", 21, "United States", false);
