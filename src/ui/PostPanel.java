@@ -1,5 +1,6 @@
 package src.ui;
 
+import src.domain.Interface.Page;
 import src.domain.Content;
 import src.domain.Group;
 import src.domain.User;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class PostPanel extends JPanel {
+public class PostPanel extends JPanel implements Page {
     MainScreen screen;
     Content post;
     String picture;
@@ -58,7 +59,8 @@ public class PostPanel extends JPanel {
     /**
      * Set all the components properties and their bounds
      */
-    private void setAllComponents() {
+    @Override
+    public void setAllComponents() {
         homeButton.setBounds(681, 3,100,25);
         editPostButton.setBounds(300, 390, 200, 30);
         changePictureButton.setBounds(300, 350, 200, 30);
@@ -80,7 +82,8 @@ public class PostPanel extends JPanel {
     /**
      * Add all the components to the panel
      */
-    private void addAllComponents() {
+    @Override
+    public void addAllComponents() {
         add(homeButton);
         add(postPicture);
         add(authorAndDateLabel);
@@ -100,7 +103,8 @@ public class PostPanel extends JPanel {
     /**
      * Listen to the buttons and perform the corresponding action
      */
-    private void listenButtons() {
+    @Override
+    public void listenButtons() {
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

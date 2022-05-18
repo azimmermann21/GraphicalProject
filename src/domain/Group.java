@@ -3,6 +3,8 @@ package src.domain;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import src.domain.Interface.Searchable;
+
 public class Group implements Searchable {
     private String name;
     private String country;

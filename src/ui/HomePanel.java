@@ -1,9 +1,10 @@
 package src.ui;
 
+import src.domain.Interface.Page;
+import src.domain.Interface.Searchable;
 import src.domain.User;
 import src.domain.Group;
 import src.domain.Content;
-import src.domain.Searchable;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -20,7 +21,7 @@ import java.util.Locale;
 
 import java.text.DateFormat;
 
-public class HomePanel extends JPanel {
+public class HomePanel extends JPanel implements Page {
     MainScreen screen;
     DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, new Locale("en", "US"));
     JButton logoutButton = new JButton("Logout");
@@ -50,7 +51,8 @@ public class HomePanel extends JPanel {
     /**
      * Set all the components properties and their bounds
      */
-    private void setAllComponents() {
+    @Override
+    public void setAllComponents() {
         logoutButton.setBounds(3, 3,100,25);
         profileButton.setBounds(681, 3,100,25);
         createPostButton.setBounds(3, 531, 150, 25);
@@ -61,7 +63,8 @@ public class HomePanel extends JPanel {
     /**
      * Add all the components to the panel
      */
-    private void addAllComponents() {
+    @Override
+    public void addAllComponents() {
         add(logoutButton);
         add(profileButton);
         add(createPostButton);
@@ -72,7 +75,8 @@ public class HomePanel extends JPanel {
     /**
      * Listen to the buttons and perform the corresponding actions
      */
-    private void listenButtons() {
+    @Override
+    public void listenButtons() {
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

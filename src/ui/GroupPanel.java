@@ -1,5 +1,6 @@
 package src.ui;
 
+import src.domain.Interface.Page;
 import src.domain.Content;
 import src.domain.Group;
 import src.domain.User;
@@ -21,7 +22,7 @@ import java.util.Locale;
 
 import java.text.DateFormat;
 
-public class GroupPanel extends JPanel {
+public class GroupPanel extends JPanel implements Page {
     MainScreen screen;
     Group group;
     DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, new Locale("en", "US"));
@@ -68,7 +69,8 @@ public class GroupPanel extends JPanel {
     /**
      * Set all the components properties and their bounds
      */
-    private void setAllComponents() {
+    @Override
+    public void setAllComponents() {
         if (group.getMembers().containsKey(screen.getMe().getUsername()))
             joinButton.setText("Leave");
         homeButton.setBounds(681, 3,100,25);
@@ -95,7 +97,8 @@ public class GroupPanel extends JPanel {
     /**
      * Add all the components to the panel
      */
-    private void addAllComponents() {
+    @Override
+    public void addAllComponents() {
         add(homeButton);
         add(groupLabel);
         add(countryLabel);
@@ -122,7 +125,8 @@ public class GroupPanel extends JPanel {
     /**
      * Listen to the buttons and perform the corresponding actions
      */
-    private void listenButtons() {
+    @Override
+    public void listenButtons() {
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

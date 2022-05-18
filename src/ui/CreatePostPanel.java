@@ -1,5 +1,6 @@
 package src.ui;
 
+import src.domain.Interface.Page;
 import src.domain.Content;
 import src.domain.Group;
 import src.domain.User;
@@ -18,7 +19,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CreatePostPanel extends JPanel {
+public class CreatePostPanel extends JPanel implements Page {
     MainScreen screen;
     Group group;
     String picture;
@@ -53,7 +54,8 @@ public class CreatePostPanel extends JPanel {
     /**
      * Set all the components properties and their bounds
      */
-    private void setAllComponents() {
+    @Override
+    public void setAllComponents() {
         if (group != null) {
             createAPostLabel.setText("Create a post for group " + group.getName());
             createAPostLabel.setBounds(270, 50, 400, 30);
@@ -74,7 +76,8 @@ public class CreatePostPanel extends JPanel {
     /**
      * Add all the components to the panel
      */
-    private void addAllComponents() {
+    @Override
+    public void addAllComponents() {
         add(homeButton);
         add(createPostButton);
         add(addPictureButton);
@@ -89,7 +92,8 @@ public class CreatePostPanel extends JPanel {
     /**
      * Listen to the buttons and perform the corresponding action
      */
-    private void listenButtons() {
+    @Override
+    public void listenButtons() {
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

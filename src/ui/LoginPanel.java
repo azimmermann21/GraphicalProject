@@ -1,19 +1,20 @@
 package src.ui;
 
+import src.domain.Interface.Page;
+import src.domain.User;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import src.domain.User;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.Font;
 
-public class LoginPanel extends JPanel {
+public class LoginPanel extends JPanel implements Page {
     MainScreen screen;
     JLabel loginLabel = new JLabel();
     JLabel usernameLabel = new JLabel();
@@ -43,7 +44,8 @@ public class LoginPanel extends JPanel {
     /**
      * Set all the components properties and their bounds
      */
-    private void setAllComponents() {
+    @Override
+    public void setAllComponents() {
         loginLabel.setText("Login");
         loginLabel.setBounds(360,120,80,40);
         loginLabel.setFont(new Font("Arial", Font.BOLD, 30));
@@ -60,7 +62,8 @@ public class LoginPanel extends JPanel {
     /**
      * Add all the components to the panel
      */
-    private void addAllComponents() {
+    @Override
+    public void addAllComponents() {
         add(loginLabel);
         add(usernameLabel);
         add(usernameText);
@@ -73,7 +76,8 @@ public class LoginPanel extends JPanel {
     /**
      * Listen to the buttons and perform the corresponding actions
      */
-    private void listenButtons() {
+    @Override
+    public void listenButtons() {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

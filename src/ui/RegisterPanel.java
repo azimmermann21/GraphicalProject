@@ -1,5 +1,6 @@
 package src.ui;
 
+import src.domain.Interface.Page;
 import src.domain.Group;
 import src.domain.User;
 import src.domain.Content;
@@ -20,7 +21,7 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RegisterPanel extends JPanel {
+public class RegisterPanel extends JPanel implements Page {
     MainScreen screen;
     String[] countries = {"France", "Germany", "Spain", "Italy", "United Kingdom", "United States", "Canada", "Australia", "New Zealand", "Turkey", "Russia", "China", "Japan", "India", "Brazil", "Argentina", "Mexico", "Portugal", "Poland", "Sweden", "Denmark", "Norway"};
     JLabel registerLabel = new JLabel("Register");
@@ -60,7 +61,8 @@ public class RegisterPanel extends JPanel {
     /**
      * Set all the components properties and their bounds
      */
-    private void setAllComponents() {
+    @Override
+    public void setAllComponents() {
         registerLabel.setBounds(340,20,160,40);
         registerLabel.setFont(new Font("Arial", Font.BOLD, 30));
         usernameLabel.setBounds(370,70,80,40);
@@ -84,7 +86,8 @@ public class RegisterPanel extends JPanel {
     /**
      * Adds all components to the panel
      */
-    private void addAllComponents() {
+    @Override
+    public void addAllComponents() {
         add(registerLabel);
         add(usernameLabel);
         add(usernameText);
@@ -107,7 +110,8 @@ public class RegisterPanel extends JPanel {
     /**
      * Listen for button presses and do the appropriate action.
      */
-    private void listenButtons() {
+    @Override
+    public void listenButtons() {
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

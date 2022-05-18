@@ -1,5 +1,6 @@
 package src.ui;
 
+import src.domain.Interface.Page;
 import src.domain.Content;
 import src.domain.Group;
 import src.domain.User;
@@ -17,7 +18,7 @@ import java.util.HashMap;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class CreateGroupPanel extends JPanel {
+public class CreateGroupPanel extends JPanel implements Page {
     MainScreen screen;
     User user;
     String[] countries = {"France", "Germany", "Spain", "Italy", "United Kingdom", "United States", "Canada", "Australia", "New Zealand", "Turkey", "Russia", "China", "Japan", "India", "Brazil", "Argentina", "Mexico", "Portugal", "Poland", "Sweden", "Denmark", "Norway"};
@@ -52,7 +53,8 @@ public class CreateGroupPanel extends JPanel {
     /**
      * Set all the components properties and their bounds
      */
-    private void setAllComponents() {
+    @Override
+    public void setAllComponents() {
         createAgroupLabel.setBounds(300, 50, 200, 30);
         createAgroupLabel.setFont(new Font("Arial", Font.BOLD, 20));
         groupNameLabel.setBounds(300, 100, 100, 30);
@@ -68,7 +70,8 @@ public class CreateGroupPanel extends JPanel {
     /**
      * Add all the components to the panel
      */
-    private void addAllComponents() {
+    @Override
+    public void addAllComponents() {
         add(createAgroupLabel);
         add(groupNameLabel);
         add(groupNameText);
@@ -83,7 +86,8 @@ public class CreateGroupPanel extends JPanel {
     /**
      * Listen to the buttons and perform the corresponding action
      */
-    private void listenButtons() {
+    @Override
+    public void listenButtons() {
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

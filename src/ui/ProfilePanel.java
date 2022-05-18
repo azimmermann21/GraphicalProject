@@ -1,5 +1,6 @@
 package src.ui;
 
+import src.domain.Interface.Page;
 import src.domain.User;
 import src.domain.Content;
 import src.domain.Group;
@@ -28,7 +29,7 @@ import java.io.File;
 
 import java.text.DateFormat;
 
-public class ProfilePanel extends JPanel {
+public class ProfilePanel extends JPanel implements Page {
     MainScreen screen;
     User user;
     String[] countries = {"France", "Germany", "Spain", "Italy", "United Kingdom", "United States", "Canada", "Australia", "New Zealand", "Turkey", "Russia", "China", "Japan", "India", "Brazil", "Argentina", "Mexico", "Portugal", "Poland", "Sweden", "Denmark", "Norway"};
@@ -92,7 +93,8 @@ public class ProfilePanel extends JPanel {
     /**
      * Set all the components properties and their bounds
      */
-    private void setAllComponents() {
+    @Override
+    public void setAllComponents() {
         if (screen.getMe().isFollowing(user))
             followButton.setText("Unfollow");
         homeButton.setBounds(681, 3,100,25);
@@ -147,7 +149,8 @@ public class ProfilePanel extends JPanel {
     /**
      * Add all the components to the panel
      */
-    private void addAllComponents() {
+    @Override
+    public void addAllComponents() {
         add(homeButton);
         add(logoutButton);
         add(followedLabel);
@@ -190,7 +193,8 @@ public class ProfilePanel extends JPanel {
     /**
      * Listen to the buttons and perform the corresponding actions
      */
-    private void listenButtons() {
+    @Override
+    public void listenButtons() {
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

@@ -2,6 +2,8 @@ package src.domain;
 
 import java.util.Date;
 
+import src.domain.Interface.Searchable;
+
 public class Content implements Searchable, Comparable<Content> {
     private String title;
     private String content;

@@ -1,4 +1,4 @@
-package src.domain;
+package src.domain.Interface;
 
 /**
  * Interface for classes that can be searched
