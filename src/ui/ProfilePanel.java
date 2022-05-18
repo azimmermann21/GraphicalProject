@@ -556,6 +556,8 @@ public class ProfilePanel extends JPanel {
             int score = 0;
             if (u.getCountry().equals(user.getCountry()))
                 score++;
+            if (user.getAge() - 5 <= u.getAge() && u.getAge() <= user.getAge() + 5)
+                score++;
             for (String s : u.getHobbies())
                 if (user.getHobbies().contains(s))
                     score++;
